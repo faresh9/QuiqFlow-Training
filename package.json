@@ -1,7 +1,27 @@
 {
-  "name": "cli-project-data-fetching",
+  "name": "quiqflow-training",
+  "version": "1.0.0",
+  "description": "QuiqFlow Training Exercises",
+  "main": "dist/script.js",
   "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/ts/script.js",
+    "start:js": "node src/js/script.js",
+    "dev:ts": "node --loader ts-node/esm src/ts/script.ts",
+    "dev:js": "node src/js/script.js",
+    "migrate": "node scripts/migrate-js-to-ts.js"
+  },
   "dependencies": {
     "node-fetch": "^3.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.0"
+  },
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
   }
 }
