@@ -3,18 +3,18 @@ import readline from 'readline';
 
 // Simple user type with just the needed properties
 type User = {
-  id: number,
-  name: string,
-  email: string,
+  id: number;
+  name: string;
+  email: string;
   address: {
-    city: string
-  }
+    city: string;
+  };
 };
 
 // Create readline interface
-var rl = readline.createInterface({
+const rl = readline.createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
 });
 
 console.log('welcome to users data explorer');
@@ -32,13 +32,13 @@ options:
       if (choice === '1') {
         await getUsers();
       } else if (choice === '2') {
-        console.log('goodbye!');  
+        console.log('goodbye!');
         rl.close();
       } else {
         console.log('invalid choice');
         showMenu();
       }
-    } catch(error) {
+    } catch (error) {
       // Simpler error handling
       console.log('error:', error);
       showMenu();
@@ -50,43 +50,42 @@ options:
 async function fetchData(endpoint: string) {
   console.log(`fetching ${endpoint}...`);
   const response = await fetch(`https://jsonplaceholder.typicode.com/${endpoint}`);
-  
+
   if (!response.ok) {
     throw new Error(`couldn't fetch data (${response.status})`);
   }
-  
+
   return await response.json();
 }
 
 // Show user data
 async function getUsers() {
   // Simplistic type casting
-  const users = await fetchData('users') as User[];
+  const users = (await fetchData('users')) as User[];
   console.log(`found ${users.length} users`);
 
-  rl.question('search by name or filter by city (type "name:<search>" or "city:<filter>"): ', (input) => {
-    let results = users;
+  rl.question(
+    'search by name or filter by city (type "name:<search>" or "city:<filter>"): ',
+    (input) => {
+      let results = users;
 
-    if (input.startsWith('name:')) {
-      const search = input.split('name:')[1].trim();
-      results = users.filter(user =>
-        user.name.toLowerCase().includes(search.toLowerCase())
-      );
-      console.log(`${results.length} matches for name "${search}"`);
-    } else if (input.startsWith('city:')) {
-      const filter = input.split('city:')[1].trim();
-      results = users.filter(user =>
-        user.address.city.toLowerCase() === filter.toLowerCase()
-      );
-      console.log(`${results.length} matches for city "${filter}"`);
+      if (input.startsWith('name:')) {
+        const search = input.split('name:')[1].trim();
+        results = users.filter((user) => user.name.toLowerCase().includes(search.toLowerCase()));
+        console.log(`${results.length} matches for name "${search}"`);
+      } else if (input.startsWith('city:')) {
+        const filter = input.split('city:')[1].trim();
+        results = users.filter((user) => user.address.city.toLowerCase() === filter.toLowerCase());
+        console.log(`${results.length} matches for city "${filter}"`);
+      }
+
+      results.forEach((user) => {
+        console.log(`${user.id}: ${user.name} (${user.email}) - ${user.address.city}`);
+      });
+
+      returnToMenu();
     }
-
-    results.forEach(user => {
-      console.log(`${user.id}: ${user.name} (${user.email}) - ${user.address.city}`);
-    });
-
-    returnToMenu();
-  });
+  );
 }
 
 // Go back to menu

@@ -16,7 +16,7 @@ export const getAllNotes = (): Note[] => {
 };
 
 export const getNoteById = (id: number): Note | undefined => {
-  return notes.find(note => note.id === id);
+  return notes.find((note) => note.id === id);
 };
 
 export const createNote = (title: string, content: string): Note => {
@@ -25,32 +25,32 @@ export const createNote = (title: string, content: string): Note => {
     title,
     content,
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
   };
-  
+
   notes.push(newNote);
   return newNote;
 };
 
 export const updateNote = (id: number, title: string, content: string): Note | null => {
-  const noteIndex = notes.findIndex(note => note.id === id);
-  
+  const noteIndex = notes.findIndex((note) => note.id === id);
+
   if (noteIndex === -1) return null;
-  
+
   const updatedNote = {
     ...notes[noteIndex],
     title,
     content,
-    updatedAt: new Date()
+    updatedAt: new Date(),
   };
-  
+
   notes[noteIndex] = updatedNote;
   return updatedNote;
 };
 
 export const deleteNote = (id: number): boolean => {
   const initialLength = notes.length;
-  notes = notes.filter(note => note.id !== id);
-  
+  notes = notes.filter((note) => note.id !== id);
+
   return notes.length !== initialLength;
 };

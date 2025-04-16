@@ -1,11 +1,11 @@
-const readline = require('readline');
+import readline from 'readline';
 
 const rl = readline.createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
 });
 
-console.log("hey there! welcome to this little app");
+console.log('hey there! welcome to this little app');
 
 rl.question('what should i call you? ', (name) => {
   console.log(`nice to meet you, ${name}!`);
@@ -18,17 +18,19 @@ rl.question('what should i call you? ', (name) => {
   `;
 
   rl.question(menu, (choice) => {
-    switch(choice) {
+    switch (choice) {
       case '1':
         console.log(`today's date is: ${new Date().toLocaleDateString()}`);
         rl.close();
         break;
       case '2':
-        console.log("here's a quote for you: 'the only way to do great work is to love what you do.' – steve jobs");
+        console.log(
+          "here's a quote for you: 'the only way to do great work is to love what you do.' – steve jobs"
+        );
         rl.close();
         break;
       case '3':
-        console.log("see you later!");
+        console.log('see you later!');
         rl.close();
         break;
       default:

@@ -1,77 +1,92 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import * as NoteModel from '../models/Note.js';
+import { asyncHandler } from '../utils/asyncHandler.js';
+import { AppError } from '../middleware/errorMiddleware.js';
 
 // GET /notes - Get all notes
-export const getAllNotes = (req: Request, res: Response) => {
+export const getAllNotes = asyncHandler(async (req: Request, res: Response) => {
   const notes = NoteModel.getAllNotes();
-  res.json(notes);
-};
+  res.json({
+    status: 'success',
+    results: notes.length,
+    data: notes,
+  });
+});
 
 // GET /notes/:id - Get a note by ID
-export const getNoteById = (req: Request, res: Response) => {
+export const getNoteById = asyncHandler(async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
-  
+
   if (isNaN(id)) {
-    return res.status(400).json({ message: 'Invalid ID format' });
+    throw new AppError('Invalid ID format', 400);
   }
-  
+
   const note = NoteModel.getNoteById(id);
-  
+
   if (!note) {
-    return res.status(404).json({ message: 'Note not found' });
+    throw new AppError('Note not found', 404);
   }
-  
-  res.json(note);
-};
+
+  res.json({
+    status: 'success',
+    data: note,
+  });
+});
 
 // POST /notes - Create a new note
-export const createNote = (req: Request, res: Response) => {
+export const createNote = asyncHandler(async (req: Request, res: Response) => {
   const { title, content } = req.body;
-  
+
   if (!title || !content) {
-    return res.status(400).json({ message: 'Title and content are required' });
+    throw new AppError('Title and content are required', 400);
   }
-  
+
   const newNote = NoteModel.createNote(title, content);
-  
-  res.status(201).json(newNote);
-};
+
+  res.status(201).json({
+    status: 'success',
+    data: newNote,
+  });
+});
 
 // PUT /notes/:id - Update a note
-export const updateNote = (req: Request, res: Response) => {
+export const updateNote = asyncHandler(async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const { title, content } = req.body;
-  
+
   if (isNaN(id)) {
-    return res.status(400).json({ message: 'Invalid ID format' });
+    throw new AppError('Invalid ID format', 400);
   }
-  
+
   if (!title || !content) {
-    return res.status(400).json({ message: 'Title and content are required' });
+    throw new AppError('Title and content are required', 400);
   }
-  
+
   const updatedNote = NoteModel.updateNote(id, title, content);
-  
+
   if (!updatedNote) {
-    return res.status(404).json({ message: 'Note not found' });
+    throw new AppError('Note not found', 404);
   }
-  
-  res.json(updatedNote);
-};
+
+  res.json({
+    status: 'success',
+    data: updatedNote,
+  });
+});
 
 // DELETE /notes/:id - Delete a note
-export const deleteNote = (req: Request, res: Response) => {
+export const deleteNote = asyncHandler(async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
-  
+
   if (isNaN(id)) {
-    return res.status(400).json({ message: 'Invalid ID format' });
+    throw new AppError('Invalid ID format', 400);
   }
-  
+
   const deleted = NoteModel.deleteNote(id);
-  
+
   if (!deleted) {
-    return res.status(404).json({ message: 'Note not found' });
+    throw new AppError('Note not found', 404);
   }
-  
+
   res.status(204).send();
-};
+});
