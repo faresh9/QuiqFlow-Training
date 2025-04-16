@@ -1,12 +1,22 @@
-function coinCombination(target) {
-    let coins = [1, 2, 5, 10, 20, 50, 100, 200];
-    let count = Array(target + 1).fill(0);
-    count[0] = 1;
-    for (let c = 0; c < coins.length; c++) {
-      for (let i = coins[c]; i <= target; i++) {
-        count[i] += count[i - coins[c]];
+function findLongestCollatz(limit) {
+    let maxLength = 0;
+    let numberWithMax = 0;
+    for (let i = 1; i < limit; i++) {
+      let n = i;
+      let count = 1;
+      while (n != 1) {
+        if (n % 2 == 0) {
+          n = n / 2;
+        } else {
+          n = 3 * n + 1;
+        }
+        count = count + 1;
+      }
+      if (count > maxLength) {
+        maxLength = count;
+        numberWithMax = i;
       }
     }
-    return count[target];
+    return numberWithMax;
   }
-  console.log(coinCombination(200));
+  console.log("Longest chain under 1 million starts at: " + findLongestCollatz(1000000));
