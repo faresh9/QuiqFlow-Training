@@ -1,9 +1,9 @@
 import process from 'process';
 import readline from 'readline';
 // Create readline interface
-var rl = readline.createInterface({
+const rl = readline.createInterface({
     input: process.stdin,
-    output: process.stdout
+    output: process.stdout,
 });
 console.log('welcome to users data explorer');
 // Show main menu
@@ -46,21 +46,21 @@ async function fetchData(endpoint) {
 // Show user data
 async function getUsers() {
     // Simplistic type casting
-    const users = await fetchData('users');
+    const users = (await fetchData('users'));
     console.log(`found ${users.length} users`);
     rl.question('search by name or filter by city (type "name:<search>" or "city:<filter>"): ', (input) => {
         let results = users;
         if (input.startsWith('name:')) {
             const search = input.split('name:')[1].trim();
-            results = users.filter(user => user.name.toLowerCase().includes(search.toLowerCase()));
+            results = users.filter((user) => user.name.toLowerCase().includes(search.toLowerCase()));
             console.log(`${results.length} matches for name "${search}"`);
         }
         else if (input.startsWith('city:')) {
             const filter = input.split('city:')[1].trim();
-            results = users.filter(user => user.address.city.toLowerCase() === filter.toLowerCase());
+            results = users.filter((user) => user.address.city.toLowerCase() === filter.toLowerCase());
             console.log(`${results.length} matches for city "${filter}"`);
         }
-        results.forEach(user => {
+        results.forEach((user) => {
             console.log(`${user.id}: ${user.name} (${user.email}) - ${user.address.city}`);
         });
         returnToMenu();
@@ -74,3 +74,4 @@ function returnToMenu() {
 }
 // Start the program
 showMenu();
+//# sourceMappingURL=script.js.map

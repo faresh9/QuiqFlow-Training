@@ -1,0 +1,132 @@
+{
+	"id": "7fcd8216-98c6-424e-9473-1efe255131de",
+	"name": "New Collection",
+	"timestamp": "2025-04-17T14:33:46.906Z",
+	"collection_id": "30808421-7a176b6b-2ef8-4d88-a2d0-ada9c8d3641b",
+	"folder_id": 0,
+	"environment_id": "0",
+	"totalPass": 0,
+	"delay": 0,
+	"persist": true,
+	"status": "finished",
+	"startedAt": "2025-04-17T14:33:45.511Z",
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "1bdb825a-71a7-48b1-8a0e-96715744045d",
+			"name": "New Request",
+			"url": "http://localhost:3000/notes/",
+			"time": 59,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				59
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "af7e951a-0368-449a-8390-0edc614d12ce",
+			"name": "New Request",
+			"url": "http://localhost:3000/notes/",
+			"time": 94,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				94
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "303ebe4e-6b46-447e-ad71-95c49f37d809",
+			"name": "New Request",
+			"url": "http://localhost:3000/notes/1",
+			"time": 8,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				8
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "ee4107de-5a88-4744-92aa-a30714c2a77c",
+			"name": "New Request",
+			"url": "http://localhost:3000/notes/1",
+			"time": 6,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				6
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "81926479-139b-4830-bb8d-848c5139602e",
+			"name": "New Request",
+			"url": "http://localhost:3000/notes/1",
+			"time": 5,
+			"responseCode": {
+				"code": 204,
+				"name": "No Content"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				5
+			],
+			"allTests": [
+				{}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 172,
+	"collection": {
+		"requests": [
+			{
+				"id": "1bdb825a-71a7-48b1-8a0e-96715744045d",
+				"method": "GET"
+			},
+			{
+				"id": "af7e951a-0368-449a-8390-0edc614d12ce",
+				"method": "POST"
+			},
+			{
+				"id": "303ebe4e-6b46-447e-ad71-95c49f37d809",
+				"method": "GET"
+			},
+			{
+				"id": "ee4107de-5a88-4744-92aa-a30714c2a77c",
+				"method": "PUT"
+			},
+			{
+				"id": "81926479-139b-4830-bb8d-848c5139602e",
+				"method": "DELETE"
+			}
+		]
+	}
+}
