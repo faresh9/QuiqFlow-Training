@@ -6,7 +6,7 @@ export enum ErrorType {
   VALIDATION = 'VALIDATION_ERROR',
   NOT_FOUND = 'NOT_FOUND',
   BAD_REQUEST = 'BAD_REQUEST',
-  INTERNAL = 'INTERNAL_ERROR'
+  INTERNAL = 'INTERNAL_ERROR',
 }
 
 // Custom error class with status code and type
@@ -38,26 +38,21 @@ export class AppError extends Error {
 }
 
 // Error handler middleware
-export const errorHandler = (
-  err: unknown,
-  req: Request, 
-  res: Response,
-  _next: NextFunction
-) => {
+export const errorHandler = (err: unknown, req: Request, res: Response, _next: NextFunction) => {
   // Create base error response
   const errorResponse = {
     status: 'error',
     message: 'Internal server error',
     timestamp: new Date().toISOString(),
-    // @ts-expect-error Extending Express Request 
-    requestId: req.id // Include request ID in responses
+    // @ts-expect-error Extending Express Request
+    requestId: req.id, // Include request ID in responses
   };
 
   // Handle AppError instances
   if (err instanceof AppError) {
     errorResponse.message = err.message;
     res.status(err.statusCode);
-  } 
+  }
   // Handle native Error objects
   else if (err instanceof Error) {
     // Additional handling for specific error types
@@ -68,7 +63,7 @@ export const errorHandler = (
       res.status(500);
       errorResponse.message = config.isDevelopment ? err.message : 'Internal server error';
     }
-  } 
+  }
   // Handle other types of errors
   else {
     res.status(500);

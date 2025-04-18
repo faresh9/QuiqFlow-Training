@@ -3,7 +3,6 @@ import noteRoutes from './routes/noteRoutes.js';
 import { errorHandler, notFoundHandler } from './middleware/errorMiddleware.js';
 import { requestLogger } from './middleware/loggerMiddleware.js';
 
-
 const app = express();
 
 // Middleware

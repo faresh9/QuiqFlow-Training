@@ -4,7 +4,7 @@ export enum LogLevel {
   INFO = 'INFO',
   WARN = 'WARN',
   ERROR = 'ERROR',
-  DEBUG = 'DEBUG'
+  DEBUG = 'DEBUG',
 }
 
 export const logger = {
@@ -22,5 +22,5 @@ export const logger = {
       // eslint-disable-next-line no-console
       console.debug(`[${new Date().toISOString()}] [DEBUG] ${message}`, meta || '');
     }
-  }
+  },
 };

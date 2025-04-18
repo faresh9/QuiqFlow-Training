@@ -10,7 +10,9 @@ export const validateTitle = (title: string): void => {
     throw AppError.validation('Title must be a string');
   }
   if (title.trim().length < config.validation.minTitleLength) {
-    throw AppError.validation(`Title must be at least ${config.validation.minTitleLength} characters long`);
+    throw AppError.validation(
+      `Title must be at least ${config.validation.minTitleLength} characters long`
+    );
   }
 };
 
@@ -22,7 +24,9 @@ export const validateContent = (content: string): void => {
     throw AppError.validation('Content must be a string');
   }
   if (content.trim().length < config.validation.minContentLength) {
-    throw AppError.validation(`Content must be at least ${config.validation.minContentLength} characters long`);
+    throw AppError.validation(
+      `Content must be at least ${config.validation.minContentLength} characters long`
+    );
   }
 };
 
