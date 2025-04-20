@@ -1,29 +1,36 @@
 import { AppError } from './errorMiddleware.js';
-export const validateNoteInput = (req, _res, next) => {
-    const { title, content } = req.body;
-    const errors = [];
+import config from '../config/env.js';
+export const validateTitle = (title) => {
     if (!title) {
-        errors.push('Title is required');
+        throw AppError.validation('Title is required');
     }
-    else if (typeof title !== 'string') {
-        errors.push('Title must be a string');
+    if (typeof title !== 'string') {
+        throw AppError.validation('Title must be a string');
     }
-    else if (title.trim().length < 3) {
-        errors.push('Title must be at least 3 characters long');
+    if (title.trim().length < config.validation.minTitleLength) {
+        throw AppError.validation(`Title must be at least ${config.validation.minTitleLength} characters long`);
     }
+};
+export const validateContent = (content) => {
     if (!content) {
-        errors.push('Content is required');
+        throw AppError.validation('Content is required');
     }
-    else if (typeof content !== 'string') {
-        errors.push('Content must be a string');
+    if (typeof content !== 'string') {
+        throw AppError.validation('Content must be a string');
     }
-    else if (content.trim().length < 10) {
-        errors.push('Content must be at least 10 characters long');
+    if (content.trim().length < config.validation.minContentLength) {
+        throw AppError.validation(`Content must be at least ${config.validation.minContentLength} characters long`);
     }
-    if (errors.length > 0) {
-        next(new AppError(errors.join('. '), 400));
-        return;
+};
+export const validateNoteInput = (req, _res, next) => {
+    try {
+        const { title, content } = req.body;
+        validateTitle(title);
+        validateContent(content);
+        next();
     }
-    next();
+    catch (error) {
+        next(error);
+    }
 };
 //# sourceMappingURL=validationMiddleware.js.map
