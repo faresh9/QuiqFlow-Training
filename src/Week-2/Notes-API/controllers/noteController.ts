@@ -68,5 +68,10 @@ export const deleteNote = asyncHandler(async (req: Request, res: Response) => {
 
   await noteService.deleteNote(id);
 
-  res.status(204).send();
+
+  res.json({
+    status: 'success',
+    message: 'Note deleted successfully',
+  });
+ 
 });
