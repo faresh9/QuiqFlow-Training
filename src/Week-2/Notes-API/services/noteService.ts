@@ -1,42 +1,64 @@
-import * as NoteModel from '../models/Note.js';
-import { AppError } from '../middleware/errorMiddleware.js';
-import type { Note } from '../models/Note.js';
+import { Note, NoteStorage } from '@/Week-2/Notes-API/interfaces/Note.js';
+import { AppError } from '@/Week-2/Notes-API/middleware/errorMiddleware.js';
 
-export const getAllNotes = async (): Promise<Note[]> => {
-  return NoteModel.getAllNotes();
-};
+export class NoteService {
+  private storage: NoteStorage;
 
-export const getNoteById = async (id: number): Promise<Note> => {
-  const note = NoteModel.getNoteById(id);
-
-  if (!note) {
-    throw AppError.notFound('Note not found');
+  constructor(storage: NoteStorage) {
+    this.storage = storage;
   }
 
-  return note;
-};
-
-export const createNote = async (title: string, content: string): Promise<Note> => {
-  // Validation already happened in middleware
-  return NoteModel.createNote(title, content);
-};
-
-export const updateNote = async (id: number, title: string, content: string): Promise<Note> => {
-  // Validation already happened in middleware
-
-  const updatedNote = NoteModel.updateNote(id, title, content);
-
-  if (!updatedNote) {
-    throw AppError.notFound('Note not found');
+  public getAllNotes(): Note[] {
+    return this.storage.notes;
   }
 
-  return updatedNote;
-};
+  public getNoteById(id: number): Note {
+    const note = this.storage.notes.find((note) => note.id === id);
 
-export const deleteNote = async (id: number): Promise<void> => {
-  const deleted = NoteModel.deleteNote(id);
+    if (!note) {
+      throw AppError.notFound('Note not found');
+    }
 
-  if (!deleted) {
-    throw AppError.notFound('Note not found');
+    return note;
   }
-};
+
+  public createNote(title: string, content: string): Note {
+    const newNote: Note = {
+      id: this.storage.nextId++,
+      title,
+      content,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    this.storage.notes.push(newNote);
+    return newNote;
+  }
+
+  public updateNote(id: number, title: string, content: string): Note {
+    const noteIndex = this.storage.notes.findIndex((note) => note.id === id);
+
+    if (noteIndex === -1) {
+      throw AppError.notFound('Note not found');
+    }
+
+    const updatedNote = {
+      ...this.storage.notes[noteIndex],
+      title,
+      content,
+      updatedAt: new Date(),
+    };
+
+    this.storage.notes[noteIndex] = updatedNote;
+    return updatedNote;
+  }
+
+  public deleteNote(id: number): void {
+    const initialLength = this.storage.notes.length;
+    this.storage.notes = this.storage.notes.filter((note) => note.id !== id);
+
+    if (this.storage.notes.length === initialLength) {
+      throw AppError.notFound('Note not found');
+    }
+  }
+}
