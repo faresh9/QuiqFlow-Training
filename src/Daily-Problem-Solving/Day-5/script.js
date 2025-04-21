@@ -21,7 +21,7 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
-// Function to ask a question and get user input
+
 function askQuestion(query) {
     return new Promise(resolve => {
         rl.question(query, resolve);
@@ -30,20 +30,20 @@ function askQuestion(query) {
 
 async function main() {
     try {
-        // Get array input from user
+        // input from user
         const arrayInput = await askQuestion("Enter numbers separated by commas (e.g. 1,2,3,4,5): ");
         const userArray = arrayInput.split(',').map(num => parseInt(num.trim()));
 
-        // Get target value from user
+        // target value from user
         const targetInput = await askQuestion("Enter the number to search for: ");
         const target = parseInt(targetInput);
 
-        // Perform binary search
-        userArray.sort((a,b)=> a-b); // Sort the array before searching 
-        console.log("Sorted Array:", userArray); // Display the sorted array
+
+        userArray.sort((a,b)=> a-b); // sort the array before searching 
+        console.log("Sorted Array:", userArray); 
        const result = bs(userArray, target);
 
-        // Display the result
+       
         if (result !== -1) {
             console.log(`Found ${target} at position ${result}`);
         } else {
