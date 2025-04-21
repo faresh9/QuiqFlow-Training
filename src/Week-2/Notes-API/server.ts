@@ -10,9 +10,9 @@ export class Server {
   private app: Application;
   private storage: NoteStorage = {
     notes: [],
-    nextId: 1
+    nextId: 1,
   };
-  
+
   constructor() {
     this.app = express();
     this.setupMiddleware();
@@ -41,5 +41,4 @@ export class Server {
       logger.info(`Server running in ${config.nodeEnv} mode on port ${config.port}`);
     });
   }
-
 }

@@ -9,7 +9,7 @@ export class NoteController {
 
   constructor(storage: NoteStorage) {
     this.noteService = new NoteService(storage);
-    
+
     // Bind methods to preserve 'this' context when passed as callbacks
     this.getAllNotes = this.getAllNotes.bind(this);
     this.getNoteById = this.getNoteById.bind(this);

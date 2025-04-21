@@ -1,24 +1,23 @@
-import dotenv from 'dotenv';
 import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
-const dbName = process.env.DB_NAME || 'chat_system';
+// Use the same database name as in config.json
+const dbName = process.env.DB_NAME || 'chat_db';
 const dbUser = process.env.DB_USER || 'postgres';
 const dbPassword = process.env.DB_PASSWORD || '342001';
 const dbHost = process.env.DB_HOST || 'localhost';
-const dbPort = process.env.DB_PORT || '5432';
+const dbPort = parseInt(process.env.DB_PORT || '5432');
 
 const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
   host: dbHost,
-  port: parseInt(dbPort, 10),
+  port: dbPort,
   dialect: 'postgres',
-  logging: process.env.NODE_ENV === 'development' ? console.log : false,
-  pool: {
-    max: 5,
-    min: 0,
-    acquire: 30000,
-    idle: 10000,
+  logging: console.log,
+  define: {
+    timestamps: true,
+    underscored: true,
   },
 });
 

@@ -11,7 +11,11 @@
     "lint": "eslint \"src/**/*.{js,ts}\"",
     "lint:fix": "eslint \"src/**/*.{js,ts}\" --fix",
     "format": "prettier --write \"src/**/*.{js,ts}\"",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "db:migrate": "sequelize-cli db:migrate --config src/Week-3/chat-system/config/config.json",
+    "db:seed": "sequelize-cli db:seed:all",
+    "init": "sequelize-cli init",
+    "chat-system": "tsx src/Week-3/chat-system/index.ts"
   },
   "dependencies": {
     "dotenv": "^16.5.0",

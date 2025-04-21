@@ -10,4 +10,3 @@ export interface NoteStorage {
   notes: Note[];
   nextId: number;
 }
-
