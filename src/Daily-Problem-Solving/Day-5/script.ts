@@ -57,7 +57,7 @@ async function main(): Promise<void> {
     //the values for binary search
     const sortedValues: number[] = indexedArray.map((item) => item.value);
     console.log('Sorted Array:', sortedValues);
-    
+
     const result: number = bs(sortedValues, target);
 
     if (result !== -1) {

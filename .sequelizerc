@@ -1,0 +1,8 @@
+const path = require('path');
+
+module.exports = {
+  'config': path.resolve('src/Week-3/chat-system/config', 'config.json'),
+  'models-path': path.resolve('src/Week-3/chat-system/models'),
+  'seeders-path': path.resolve('src/Week-3/chat-system/seeders'),
+  'migrations-path': path.resolve('src/Week-3/chat-system/migrations')
+};

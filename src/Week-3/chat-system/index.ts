@@ -7,33 +7,19 @@ async function testConnection() {
     console.log('Database connection has been established successfully.');
 
     // Sync all models with database
-    await sequelize.sync({ force: true });
+    await sequelize.sync({ force: true }); // Use force: true for testing purposes
+    // This will drop the tables if they exist and recreate them
+    // Remove force: true in production to avoid data loss
+    // await sequelize.sync(); // Use this in production to avoid data loss
     console.log('Models synchronized with database.');
 
-    // Create a test user
-    const user = await User.create({
-      username: 'testuser',
-      email: 'test@example.com',
-      password: 'password123', // In a real app, this would be hashed
-    });
-
-    // Create a test room
-    const room = await Room.create({
-      name: 'General Chat',
-      description: 'A general chat room for everyone',
-    });
-
-    // Create a test message
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const message = await Message.create({
-      content: 'Hello world!',
-      userId: user.id,
-      roomId: room.id,
-    });
-
-    console.log('Test data created successfully!');
-
     // Query the test message with associations
+    //What This Query Does:
+    // This single line of code performs powerful database operations:
+    // Retrieves all messages from your database
+    // Eagerly loads related data for each message:
+    // The user who sent the message
+    // The room where the message was posted
     const messages = await Message.findAll({
       include: [User, Room],
     });
