@@ -15,7 +15,16 @@
     "db:migrate": "sequelize-cli db:migrate --config src/Week-3/chat-system/config/config.json",
     "db:seed": "sequelize-cli db:seed:all",
     "init": "sequelize-cli init",
-    "chat-system": "tsx src/Week-3/chat-system/index.ts"
+    "chat-system": "tsx src/Week-3/chat-system/index.ts",
+    "day-5" : "tsx src/Daily-Problem-Solving/day-5/script.ts",
+    "day-6" : "tsx src/Daily-Problem-Solving/day-6/script.ts",
+    "day-7" : "tsx src/Daily-Problem-Solving/day-7/script.ts",
+    "day-8" : "tsx src/Daily-Problem-Solving/day-8/script.ts",
+    "day-9" : "tsx src/Daily-Problem-Solving/day-9/script.ts",
+    "day-10" : "tsx src/Daily-Problem-Solving/day-10/script.ts",
+    "day-11" : "tsx src/Daily-Problem-Solving/day-11/script.ts",
+    "day-12" : "tsx src/Daily-Problem-Solving/day-12/script.ts",
+    "day-13" : "tsx src/Daily-Problem-Solving/day-13/script.ts"
   },
   "dependencies": {
     "dotenv": "^16.5.0",

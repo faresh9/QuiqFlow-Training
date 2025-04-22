@@ -16,6 +16,9 @@ const compat = new FlatCompat({
 });
 
 export default defineConfig([{
+    // Only lint TypeScript files
+    files: ["**/*.ts", "**/*.tsx"],
+    
     extends: compat.extends("eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"),
 
     plugins: {
@@ -34,7 +37,8 @@ export default defineConfig([{
 
     rules: {
         "no-console": ["warn", {
-            allow: ["error", "warn", "info"],
+            // Allow console.log in addition to error, warn, and info
+            allow: ["error", "warn", "info", "log"],
         }],
 
         "@typescript-eslint/explicit-function-return-type": "off",

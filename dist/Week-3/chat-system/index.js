@@ -19,6 +19,7 @@ async function testConnection() {
             description: 'A general chat room for everyone',
         });
         // Create a test message
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const message = await Message.create({
             content: 'Hello world!',
             userId: user.id,
