@@ -1,56 +1,65 @@
-import { asyncHandler } from '../utils/asyncHandler.js';
-import { AppError } from '../middleware/errorMiddleware.js';
-import * as noteService from '../services/noteService.js';
-// GET /notes - Get all notes
-export const getAllNotes = asyncHandler(async (_req, res) => {
-    const notes = await noteService.getAllNotes();
-    res.json({
-        status: 'success',
-        results: notes.length,
-        data: notes,
-    });
-});
-// GET /notes/:id - Get a note by ID
-export const getNoteById = asyncHandler(async (req, res) => {
-    const id = parseInt(req.params.id);
-    if (isNaN(id)) {
-        throw AppError.badRequest('Invalid ID format');
+import { NoteService } from '@/Week-2/Notes-API/services/noteService.js';
+import { asyncHandler } from '@/Week-2/Notes-API/utils/asyncHandler.js';
+import { AppError } from '@/Week-2/Notes-API/middleware/errorMiddleware.js';
+export class NoteController {
+    constructor(storage) {
+        this.getAllNotes = asyncHandler(async (_req, res) => {
+            const notes = this.noteService.getAllNotes();
+            res.json({
+                status: 'success',
+                results: notes.length,
+                data: notes,
+            });
+        });
+        this.getNoteById = asyncHandler(async (req, res) => {
+            const id = parseInt(req.params.id);
+            if (isNaN(id)) {
+                throw AppError.badRequest('Invalid ID format');
+            }
+            const note = this.noteService.getNoteById(id);
+            res.json({
+                status: 'success',
+                data: note,
+            });
+        });
+        this.createNote = asyncHandler(async (req, res) => {
+            const { title, content } = req.body;
+            const newNote = this.noteService.createNote(title, content);
+            res.status(201).json({
+                status: 'success',
+                data: newNote,
+            });
+        });
+        this.updateNote = asyncHandler(async (req, res) => {
+            const id = parseInt(req.params.id);
+            const { title, content } = req.body;
+            if (isNaN(id)) {
+                throw AppError.badRequest('Invalid ID format');
+            }
+            const updatedNote = this.noteService.updateNote(id, title, content);
+            res.json({
+                status: 'success',
+                data: updatedNote,
+            });
+        });
+        this.deleteNote = asyncHandler(async (req, res) => {
+            const id = parseInt(req.params.id);
+            if (isNaN(id)) {
+                throw AppError.badRequest('Invalid ID format');
+            }
+            this.noteService.deleteNote(id);
+            res.json({
+                status: 'success',
+                message: 'Note deleted successfully',
+            });
+        });
+        this.noteService = new NoteService(storage);
+        // Bind methods to preserve 'this' context when passed as callbacks
+        this.getAllNotes = this.getAllNotes.bind(this);
+        this.getNoteById = this.getNoteById.bind(this);
+        this.createNote = this.createNote.bind(this);
+        this.updateNote = this.updateNote.bind(this);
+        this.deleteNote = this.deleteNote.bind(this);
     }
-    const note = await noteService.getNoteById(id);
-    res.json({
-        status: 'success',
-        data: note,
-    });
-});
-// POST /notes - Create a new note
-export const createNote = asyncHandler(async (req, res) => {
-    const { title, content } = req.body;
-    const newNote = await noteService.createNote(title, content);
-    res.status(201).json({
-        status: 'success',
-        data: newNote,
-    });
-});
-// PUT /notes/:id - Update a note
-export const updateNote = asyncHandler(async (req, res) => {
-    const id = parseInt(req.params.id);
-    const { title, content } = req.body;
-    if (isNaN(id)) {
-        throw AppError.badRequest('Invalid ID format');
-    }
-    const updatedNote = await noteService.updateNote(id, title, content);
-    res.json({
-        status: 'success',
-        data: updatedNote,
-    });
-});
-// DELETE /notes/:id - Delete a note
-export const deleteNote = asyncHandler(async (req, res) => {
-    const id = parseInt(req.params.id);
-    if (isNaN(id)) {
-        throw AppError.badRequest('Invalid ID format');
-    }
-    await noteService.deleteNote(id);
-    res.status(204).send();
-});
+}
 //# sourceMappingURL=noteController.js.map

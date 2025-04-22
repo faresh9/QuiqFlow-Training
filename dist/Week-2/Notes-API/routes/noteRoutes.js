@@ -1,16 +1,18 @@
-import { Router } from 'express';
-import * as noteController from '../controllers/noteController.js';
-import { validateNoteInput } from '../middleware/validationMiddleware.js';
-const router = Router();
-// GET /notes - Get all notes
-router.get('/', noteController.getAllNotes);
-// GET /notes/:id - Get a single note
-router.get('/:id', noteController.getNoteById);
-// POST /notes - Create a new note
-router.post('/', validateNoteInput, noteController.createNote);
-// PUT /notes/:id - Update a note
-router.put('/:id', validateNoteInput, noteController.updateNote);
-// DELETE /notes/:id - Delete a note
-router.delete('/:id', noteController.deleteNote);
-export default router;
+import { NoteController } from '@/Week-2/Notes-API/controllers/noteController.js';
+import { validateNoteInput } from '@/Week-2/Notes-API/middleware/validationMiddleware.js';
+export class Router {
+    constructor(app, storage) {
+        this.app = app;
+        // Just pass the storage directly to the controller without storing it locally
+        this.noteController = new NoteController(storage);
+    }
+    setupRoutes() {
+        // Routes remain the same
+        this.app.get('/notes', this.noteController.getAllNotes);
+        this.app.get('/notes/:id', this.noteController.getNoteById);
+        this.app.post('/notes', validateNoteInput, this.noteController.createNote);
+        this.app.put('/notes/:id', validateNoteInput, this.noteController.updateNote);
+        this.app.delete('/notes/:id', this.noteController.deleteNote);
+    }
+}
 //# sourceMappingURL=noteRoutes.js.map
