@@ -24,7 +24,11 @@
     "day-10" : "tsx src/Daily-Problem-Solving/day-10/script.ts",
     "day-11" : "tsx src/Daily-Problem-Solving/day-11/script.ts",
     "day-12" : "tsx src/Daily-Problem-Solving/day-12/script.ts",
-    "day-13" : "tsx src/Daily-Problem-Solving/day-13/script.ts"
+    "day-13" : "tsx src/Daily-Problem-Solving/day-13/script.ts",
+    "migrate": "tsx src/Week-3/chat-system/migrate.ts",
+    "migrate:down": "tsx src/Week-3/chat-system/migrate.ts down",
+    "migrate:reset": "tsx src/Week-3/chat-system/migrate.ts reset",
+    "migrate:status": "tsx src/Week-3/chat-system/migrate.ts status"
   },
   "dependencies": {
     "dotenv": "^16.5.0",

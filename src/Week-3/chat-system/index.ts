@@ -1,34 +1,38 @@
-import sequelize from './config/database.js';
-import { User, Room, Message } from './models/index.js';
+import SequelizeInstance from './config/SequelizeInstance.js';
 
 async function testConnection() {
   try {
+    const sequelize = SequelizeInstance.getInstance();
     await sequelize.authenticate();
     console.log('Database connection has been established successfully.');
 
     // Sync all models with database
     await sequelize.sync({ force: true }); // Use force: true for testing purposes
-    // This will drop the tables if they exist and recreate them
-    // Remove force: true in production to avoid data loss
-    // await sequelize.sync(); // Use this in production to avoid data loss
     console.log('Models synchronized with database.');
 
-    // Query the test message with associations
-    //What This Query Does:
-    // This single line of code performs powerful database operations:
-    // Retrieves all messages from your database
-    // Eagerly loads related data for each message:
-    // The user who sent the message
-    // The room where the message was posted
-    const messages = await Message.findAll({
-      include: [User, Room],
-    });
+    // Get repositories through the SequelizeInstance class
+    const messageRepository = SequelizeInstance.getMessageRepository();
+    const userRepository = SequelizeInstance.getUserRepository();
+    const roomRepository = SequelizeInstance.getRoomRepository();
 
+    // Use repository pattern instead of direct model access
+    const messages = await messageRepository.findAllWithAssociations(); // Example usage of findAllWithAssociations
+    const users = await userRepository.findAll();
+    const rooms = await roomRepository.findAll();
+    const roomWithParticipants = await roomRepository.findWithParticipants(1); // Example room ID
+
+    console.log('Messages:\n');
     console.log(JSON.stringify(messages, null, 2));
+    console.log('Users:\n');
+    console.log(JSON.stringify(users, null, 2));
+    console.log('Rooms:\n');
+    console.log(JSON.stringify(rooms, null, 2));
+    console.log('Room with Participants:\n');
+    console.log(JSON.stringify(roomWithParticipants, null, 2));
   } catch (error) {
     console.error('Unable to connect to the database:', error);
   } finally {
-    await sequelize.close();
+    await SequelizeInstance.getInstance().close();
   }
 }
 

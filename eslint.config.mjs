@@ -42,7 +42,7 @@ export default defineConfig([{
         }],
 
         "@typescript-eslint/explicit-function-return-type": "off",
-        "@typescript-eslint/no-explicit-any": "error",
+        "@typescript-eslint/no-explicit-any": "off",
 
         "@typescript-eslint/no-unused-vars": ["error", {
             argsIgnorePattern: "^_",

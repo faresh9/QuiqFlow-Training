@@ -32,21 +32,17 @@ function askQuestion(query: string): Promise<string> {
 async function main(): Promise<void> {
   try {
     const input = await askQuestion('Enter a string to generate anagrams: ');
-    
+
     if (!input || input.trim().length === 0) {
       console.log('Please provide a non-empty string.');
       return;
     }
-    
-   
 
-    
     console.log(`Generating anagrams for '${input}'...`);
     const result = allAnagrams(input);
-    
+
     console.log(`\nFound ${result.length} anagrams:`);
     console.log(result.join(', '));
-    
   } catch (error) {
     console.error('An error occurred:', error);
   } finally {
