@@ -3,12 +3,14 @@ import config from './config.json' with { type: 'json' };
 import UserRepository from '../repositories/UserRepository.js';
 import RoomRepository from '../repositories/RoomRepository.js';
 import MessageRepository from '../repositories/MessageRepository.js';
+import { initializeModels } from '../models/index.js';
 
 class SequelizeInstance {
   private static instance: Sequelize | null = null;
   private static userRepository: UserRepository | null = null;
   private static roomRepository: RoomRepository | null = null;
   private static messageRepository: MessageRepository | null = null;
+  private static initialized = false;
 
   private constructor() {
     // Private constructor prevents direct instantiation
@@ -33,6 +35,12 @@ class SequelizeInstance {
           },
         }
       );
+
+      // Initialize models only once after creating the instance
+      if (!SequelizeInstance.initialized) {
+        initializeModels(SequelizeInstance.instance);
+        SequelizeInstance.initialized = true;
+      }
     }
 
     return SequelizeInstance.instance;
@@ -63,6 +71,7 @@ class SequelizeInstance {
     if (SequelizeInstance.instance) {
       await SequelizeInstance.instance.close();
       SequelizeInstance.instance = null;
+      SequelizeInstance.initialized = false;
     }
     // Reset repositories to null as well
     SequelizeInstance.userRepository = null;

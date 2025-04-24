@@ -1,5 +1,4 @@
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../config/database.js';
+import { Model, DataTypes, Sequelize } from 'sequelize';
 
 interface RoomAttributes {
   id?: number;
@@ -10,7 +9,6 @@ interface RoomAttributes {
 }
 
 export class Room extends Model<RoomAttributes> {
-  // Use declare instead of public fields
   declare id: number;
   declare name: string;
   declare description: string;
@@ -18,25 +16,29 @@ export class Room extends Model<RoomAttributes> {
   declare readonly updatedAt: Date;
 }
 
-Room.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
+export function initRoom(sequelize: Sequelize) {
+  Room.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      name: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+      },
+      description: {
+        type: DataTypes.STRING(200),
+        allowNull: true,
+      },
     },
-    name: {
-      type: DataTypes.STRING(50),
-      allowNull: false,
-    },
-    description: {
-      type: DataTypes.STRING(200),
-      allowNull: true,
-    },
-  },
-  {
-    sequelize,
-    tableName: 'rooms',
-    modelName: 'Room',
-  }
-);
+    {
+      sequelize,
+      tableName: 'rooms',
+      modelName: 'Room',
+    }
+  );
+  
+  return Room;
+}

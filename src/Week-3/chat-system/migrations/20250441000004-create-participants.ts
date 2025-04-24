@@ -1,14 +1,15 @@
-'use strict';
+import { DataTypes, QueryInterface } from 'sequelize';
+import { MigrationFn } from 'umzug';
 
-export async function up(queryInterface, Sequelize) {
+export const up: MigrationFn<QueryInterface> = async ({ context: queryInterface }) => {
   await queryInterface.createTable('participants', {
     id: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
     user_id: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'users',
@@ -18,7 +19,7 @@ export async function up(queryInterface, Sequelize) {
       onDelete: 'CASCADE',
     },
     room_id: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'rooms',
@@ -28,26 +29,26 @@ export async function up(queryInterface, Sequelize) {
       onDelete: 'CASCADE',
     },
     joined_at: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: Sequelize.NOW,
+      defaultValue: DataTypes.NOW,
     },
     created_at: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: false,
     },
     updated_at: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: false,
     },
   });
 
-  // Add a composite unique constraint to prevent duplicate participants
-  await queryInterface.addIndex('participants', ['user_id', 'room_id'], {
-    unique: true,
-  });
-}
+  // // Add a composite unique constraint to prevent duplicate participants
+  // await queryInterface.addIndex('participants', ['user_id', 'room_id'], {
+  //   unique: true,
+  // });
+};
 
-export async function down(queryInterface, Sequelize) {
+export const down: MigrationFn<QueryInterface> = async ({ context: queryInterface }) => {
   await queryInterface.dropTable('participants');
-}
+};

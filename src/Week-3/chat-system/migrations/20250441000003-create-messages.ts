@@ -1,18 +1,19 @@
-'use strict';
+import { DataTypes, QueryInterface } from 'sequelize';
+import { MigrationFn } from 'umzug';
 
-export async function up(queryInterface, Sequelize) {
+export const up: MigrationFn<QueryInterface> = async ({ context: queryInterface }) => {
   await queryInterface.createTable('messages', {
     id: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
     content: {
-      type: Sequelize.TEXT,
+      type: DataTypes.TEXT,
       allowNull: false,
     },
     user_id: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'users',
@@ -22,7 +23,7 @@ export async function up(queryInterface, Sequelize) {
       onDelete: 'CASCADE',
     },
     room_id: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'rooms',
@@ -32,16 +33,16 @@ export async function up(queryInterface, Sequelize) {
       onDelete: 'CASCADE',
     },
     created_at: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: false,
     },
     updated_at: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: false,
     },
   });
-}
+};
 
-export async function down(queryInterface, Sequelize) {
+export const down: MigrationFn<QueryInterface> = async ({ context: queryInterface }) => {
   await queryInterface.dropTable('messages');
-}
+};

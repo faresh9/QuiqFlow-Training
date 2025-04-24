@@ -1,5 +1,4 @@
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../config/database.js';
+import { Model, DataTypes, Sequelize } from 'sequelize';
 
 interface UserAttributes {
   id?: number;
@@ -11,7 +10,6 @@ interface UserAttributes {
 }
 
 export class User extends Model<UserAttributes> {
-  // Use declare instead of public fields
   declare id: number;
   declare username: string;
   declare email: string;
@@ -20,34 +18,38 @@ export class User extends Model<UserAttributes> {
   declare readonly updatedAt: Date;
 }
 
-User.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    username: {
-      type: DataTypes.STRING(50),
-      allowNull: false,
-      unique: true,
-    },
-    email: {
-      type: DataTypes.STRING(100),
-      allowNull: false,
-      unique: true,
-      validate: {
-        isEmail: true,
+export function initUser(sequelize: Sequelize) {
+  User.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      username: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+        unique: true,
+      },
+      email: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+        unique: true,
+        validate: {
+          isEmail: true,
+        },
+      },
+      password: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
       },
     },
-    password: {
-      type: DataTypes.STRING(100),
-      allowNull: false,
-    },
-  },
-  {
-    sequelize,
-    tableName: 'users',
-    modelName: 'User',
-  }
-);
+    {
+      sequelize,
+      tableName: 'users',
+      modelName: 'User',
+    }
+  );
+  
+  return User;
+}

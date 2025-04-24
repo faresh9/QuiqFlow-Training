@@ -1,5 +1,4 @@
 import { Umzug, SequelizeStorage } from 'umzug';
-import { Sequelize } from 'sequelize';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import SequelizeInstance from './SequelizeInstance.js';
@@ -14,7 +13,7 @@ export function getMigrator() {
   
   return new Umzug({
     migrations: {
-      glob: ['../migrations/*.js', { cwd: __dirname }],
+      glob: ['../migrations/*.ts', { cwd: __dirname }],
     },
     context: sequelize.getQueryInterface(),
     storage: new SequelizeStorage({ sequelize }),
@@ -55,6 +54,6 @@ export const migrations = {
 };
 
 // Run migrations on startup
-  runMigrations()
-    .then(() => console.log('Migrations completed successfully'))
-    .catch(err => console.error('Error running migrations:', err));
+  // runMigrations()
+  //   .then(() => console.log('Migrations completed successfully'))
+  //   .catch(err => console.error('Error running migrations:', err));

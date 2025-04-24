@@ -7,7 +7,7 @@ async function testConnection() {
     console.log('Database connection has been established successfully.');
 
     // Sync all models with database
-    await sequelize.sync({ force: true }); // Use force: true for testing purposes
+    await sequelize.sync(); // Use force: true for testing purposes
     console.log('Models synchronized with database.');
 
     // Get repositories through the SequelizeInstance class
@@ -32,7 +32,7 @@ async function testConnection() {
   } catch (error) {
     console.error('Unable to connect to the database:', error);
   } finally {
-    await SequelizeInstance.getInstance().close();
+    await SequelizeInstance.closeConnection();
   }
 }
 

@@ -16,19 +16,20 @@
     "db:seed": "sequelize-cli db:seed:all",
     "init": "sequelize-cli init",
     "chat-system": "tsx src/Week-3/chat-system/index.ts",
-    "day-5" : "tsx src/Daily-Problem-Solving/day-5/script.ts",
-    "day-6" : "tsx src/Daily-Problem-Solving/day-6/script.ts",
-    "day-7" : "tsx src/Daily-Problem-Solving/day-7/script.ts",
-    "day-8" : "tsx src/Daily-Problem-Solving/day-8/script.ts",
-    "day-9" : "tsx src/Daily-Problem-Solving/day-9/script.ts",
-    "day-10" : "tsx src/Daily-Problem-Solving/day-10/script.ts",
-    "day-11" : "tsx src/Daily-Problem-Solving/day-11/script.ts",
-    "day-12" : "tsx src/Daily-Problem-Solving/day-12/script.ts",
-    "day-13" : "tsx src/Daily-Problem-Solving/day-13/script.ts",
+    "day-5": "tsx src/Daily-Problem-Solving/day-5/script.ts",
+    "day-6": "tsx src/Daily-Problem-Solving/day-6/script.ts",
+    "day-7": "tsx src/Daily-Problem-Solving/day-7/script.ts",
+    "day-8": "tsx src/Daily-Problem-Solving/day-8/script.ts",
+    "day-9": "tsx src/Daily-Problem-Solving/day-9/script.ts",
+    "day-10": "tsx src/Daily-Problem-Solving/day-10/script.ts",
+    "day-11": "tsx src/Daily-Problem-Solving/day-11/script.ts",
+    "day-12": "tsx src/Daily-Problem-Solving/day-12/script.ts",
+    "day-13": "tsx src/Daily-Problem-Solving/day-13/script.ts",
     "migrate": "tsx src/Week-3/chat-system/migrate.ts",
     "migrate:down": "tsx src/Week-3/chat-system/migrate.ts down",
     "migrate:reset": "tsx src/Week-3/chat-system/migrate.ts reset",
-    "migrate:status": "tsx src/Week-3/chat-system/migrate.ts status"
+    "migrate:status": "tsx src/Week-3/chat-system/migrate.ts status",
+    "create-migration": "tsx src/Week-3/chat-system/create-migration.ts"
   },
   "dependencies": {
     "dotenv": "^16.5.0",
@@ -37,7 +38,8 @@
     "pg": "^8.14.1",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.37.7",
-    "sequelize-cli": "^6.6.2"
+    "sequelize-cli": "^6.6.2",
+    "umzug": "^3.8.2"
   },
   "devDependencies": {
     "@types/express": "^5.0.1",

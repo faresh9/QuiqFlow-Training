@@ -21,11 +21,11 @@ async function main() {
         break;
       
       case 'status':
-        console.log('Migration status:');
+        { console.log('Migration status:');
         const status = await migrations.status();
         console.log('Executed:', status.executed);
         console.log('Pending:', status.pending);
-        break;
+        break; }
       
       default:
         console.log('Unknown command. Use: up, down, reset, or status');
@@ -35,7 +35,7 @@ async function main() {
     process.exit(1);
   }
 
-  console.log('Done');
+  console.log('Done ✔✔✔🐱');
   process.exit(0);
 }
 

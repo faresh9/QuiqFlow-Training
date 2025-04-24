@@ -1,7 +1,5 @@
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../config/database.js';
-import { User } from './User.js';
-import { Room } from './Room.js';
+import { Model, DataTypes, Sequelize } from 'sequelize';
+
 
 interface MessageAttributes {
   id?: number;
@@ -13,15 +11,6 @@ interface MessageAttributes {
 }
 
 export class Message extends Model<MessageAttributes> {
-  // remove these to avoid shadowing
-
-  // public id!: number;
-  // public content!: string;
-  // public userId!: number;
-  // public roomId!: number;
-  // public readonly createdAt!: Date;
-  // public readonly updatedAt!: Date;
-
   declare id: number;
   declare content: string;
   declare userId: number;
@@ -30,37 +19,41 @@ export class Message extends Model<MessageAttributes> {
   declare readonly updatedAt: Date;
 }
 
-Message.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    content: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: User,
-        key: 'id',
+export function initMessage(sequelize: Sequelize) {
+  Message.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      content: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
+      },
+      roomId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'rooms',
+          key: 'id',
+        },
       },
     },
-    roomId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: Room,
-        key: 'id',
-      },
-    },
-  },
-  {
-    sequelize,
-    tableName: 'messages',
-    modelName: 'Message',
-  }
-);
+    {
+      sequelize,
+      tableName: 'messages',
+      modelName: 'Message',
+    }
+  );
+  
+  return Message;
+}

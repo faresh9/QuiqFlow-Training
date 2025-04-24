@@ -1,16 +1,12 @@
 import { Model, DataTypes } from 'sequelize';
-export class Message extends Model {
+export class Participant extends Model {
 }
-export function initMessage(sequelize) {
-    Message.init({
+export function initParticipant(sequelize) {
+    Participant.init({
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
-        },
-        content: {
-            type: DataTypes.TEXT,
-            allowNull: false,
         },
         userId: {
             type: DataTypes.INTEGER,
@@ -28,11 +24,16 @@ export function initMessage(sequelize) {
                 key: 'id',
             },
         },
+        joinedAt: {
+            type: DataTypes.DATE,
+            allowNull: false,
+            defaultValue: DataTypes.NOW,
+        },
     }, {
         sequelize,
-        tableName: 'messages',
-        modelName: 'Message',
+        tableName: 'participants',
+        modelName: 'Participant',
     });
-    return Message;
+    return Participant;
 }
-//# sourceMappingURL=Message.js.map
+//# sourceMappingURL=Participant.js.map

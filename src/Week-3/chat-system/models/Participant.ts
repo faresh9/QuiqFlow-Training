@@ -1,7 +1,5 @@
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../config/database.js';
-import { User } from './User.js';
-import { Room } from './Room.js';
+import { Model, DataTypes, Sequelize } from 'sequelize';
+
 
 interface ParticipantAttributes {
   id?: number;
@@ -21,38 +19,42 @@ export class Participant extends Model<ParticipantAttributes> {
   declare readonly updatedAt: Date;
 }
 
-Participant.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: User,
-        key: 'id',
+export function initParticipant(sequelize: Sequelize) {
+  Participant.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
+      },
+      roomId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'rooms',
+          key: 'id',
+        },
+      },
+      joinedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
       },
     },
-    roomId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: Room,
-        key: 'id',
-      },
-    },
-    joinedAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
-  },
-  {
-    sequelize,
-    tableName: 'participants',
-    modelName: 'Participant',
-  }
-);
+    {
+      sequelize,
+      tableName: 'participants',
+      modelName: 'Participant',
+    }
+  );
+  
+  return Participant;
+}

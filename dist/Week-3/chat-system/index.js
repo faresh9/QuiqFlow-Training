@@ -1,42 +1,35 @@
-import sequelize from './config/database.js';
-import { User, Room, Message } from './models/index.js';
+import SequelizeInstance from './config/SequelizeInstance.js';
 async function testConnection() {
     try {
+        const sequelize = SequelizeInstance.getInstance();
         await sequelize.authenticate();
         console.log('Database connection has been established successfully.');
         // Sync all models with database
-        await sequelize.sync({ force: true });
+        await sequelize.sync({ force: true }); // Use force: true for testing purposes
         console.log('Models synchronized with database.');
-        // Create a test user
-        const user = await User.create({
-            username: 'testuser',
-            email: 'test@example.com',
-            password: 'password123', // In a real app, this would be hashed
-        });
-        // Create a test room
-        const room = await Room.create({
-            name: 'General Chat',
-            description: 'A general chat room for everyone',
-        });
-        // Create a test message
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const message = await Message.create({
-            content: 'Hello world!',
-            userId: user.id,
-            roomId: room.id,
-        });
-        console.log('Test data created successfully!');
-        // Query the test message with associations
-        const messages = await Message.findAll({
-            include: [User, Room],
-        });
+        // Get repositories through the SequelizeInstance class
+        const messageRepository = SequelizeInstance.getMessageRepository();
+        const userRepository = SequelizeInstance.getUserRepository();
+        const roomRepository = SequelizeInstance.getRoomRepository();
+        // Use repository pattern instead of direct model access
+        const messages = await messageRepository.findAllWithAssociations(); // Example usage of findAllWithAssociations
+        const users = await userRepository.findAll();
+        const rooms = await roomRepository.findAll();
+        const roomWithParticipants = await roomRepository.findWithParticipants(1); // Example room ID
+        console.log('Messages:\n');
         console.log(JSON.stringify(messages, null, 2));
+        console.log('Users:\n');
+        console.log(JSON.stringify(users, null, 2));
+        console.log('Rooms:\n');
+        console.log(JSON.stringify(rooms, null, 2));
+        console.log('Room with Participants:\n');
+        console.log(JSON.stringify(roomWithParticipants, null, 2));
     }
     catch (error) {
         console.error('Unable to connect to the database:', error);
     }
     finally {
-        await sequelize.close();
+        await SequelizeInstance.closeConnection();
     }
 }
 testConnection();
