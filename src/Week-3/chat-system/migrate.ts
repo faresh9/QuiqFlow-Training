@@ -1,42 +1,49 @@
 import { migrations } from './config/migrations.js';
+import { logger } from './api/utils/logger.js';
 
-const command = process.argv[2] || 'up';
-
-async function main() {
+async function runMigration() {
   try {
+    const command = process.argv[2] || 'up';
+
     switch (command) {
       case 'up':
-        console.log('Running all pending migrations...');
+        logger.info('Running pending migrations...');
         await migrations.up();
+        logger.info('Migrations completed successfully');
         break;
-      
+
       case 'down':
-        console.log('Reverting the most recent migration...');
+        logger.info('Reverting the most recent migration...');
         await migrations.down();
+        logger.info('Migration reverted successfully');
         break;
-      
+
       case 'reset':
-        console.log('Reverting all migrations...');
+        logger.info('Resetting all migrations...');
         await migrations.reset();
+        logger.info('All migrations reverted successfully');
         break;
-      
+
       case 'status':
-        { console.log('Migration status:');
+        logger.info('Getting migration status...');
         const status = await migrations.status();
-        console.log('Executed:', status.executed);
-        console.log('Pending:', status.pending);
-        break; }
-      
+        logger.info('Migration status:');
+        logger.info('Pending migrations:', status.pending);
+        logger.info('Executed migrations:', status.executed);
+        break;
+
       default:
-        console.log('Unknown command. Use: up, down, reset, or status');
+        logger.error(`Unknown command: ${command}`);
+        logger.info('Available commands: up, down, reset, status');
+        process.exit(1);
     }
   } catch (error) {
-    console.error('Migration error:', error);
+    logger.error('Migration error:');
     process.exit(1);
   }
-
-  console.log('Done ✔✔✔🐱');
-  process.exit(0);
 }
 
-main();
+// runMigration().catch(() => {
+//   logger.error('Unhandled error:');
+//   process.exit(1);
+// });

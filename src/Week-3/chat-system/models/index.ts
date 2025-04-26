@@ -37,8 +37,6 @@ export function initializeModels(sequelize: Sequelize) {
   Participant.belongsTo(Room, { foreignKey: 'roomId' });
 }
 
-
-
 export { User, Room, Message, Participant };
 export default { User, Room, Message, Participant };
 

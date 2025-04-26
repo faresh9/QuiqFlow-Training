@@ -1,5 +1,7 @@
 import { Sequelize } from 'sequelize';
 import { Room, User, Participant } from '../models/index.js';
+import { withTransaction } from '../api/utils/transactionHandler.js';
+import { logger } from '../api/utils/logger.js';
 
 class RoomRepository {
   private sequelize: Sequelize;
@@ -22,55 +24,65 @@ class RoomRepository {
     });
   }
 
+  async findRoomsByUserId(userId: number) {
+    return await Room.findAll({
+      include: [
+        {
+          model: Participant,
+          where: { userId },
+          attributes: [],
+        },
+      ],
+    });
+  }
+
+  async isUserInRoom(userId: number, roomId: number): Promise<boolean> {
+    const participant = await Participant.findOne({
+      where: {
+        userId,
+        roomId,
+      },
+    });
+
+    return !!participant;
+  }
+
   async create(roomData: any) {
-    const transaction = await this.sequelize.transaction();
-    try {
+    return await withTransaction(this.sequelize, async (transaction) => {
       const room = await Room.create(roomData, { transaction });
-      await transaction.commit();
+      logger.debug(`Room created with id: ${room.id}`);
       return room;
-    } catch (error) {
-      await transaction.rollback();
-      throw error;
-    }
+    });
   }
 
   async update(id: number, roomData: any) {
-    const transaction = await this.sequelize.transaction();
-    try {
+    return await withTransaction(this.sequelize, async (transaction) => {
       const room = await Room.findByPk(id, { transaction });
       if (!room) {
-        await transaction.rollback();
+        logger.warn(`Attempted to update non-existent room with id: ${id}`);
         return null;
       }
       const updatedRoom = await room.update(roomData, { transaction });
-      await transaction.commit();
+      logger.debug(`Room updated with id: ${id}`);
       return updatedRoom;
-    } catch (error) {
-      await transaction.rollback();
-      throw error;
-    }
+    });
   }
 
   async delete(id: number) {
-    const transaction = await this.sequelize.transaction();
-    try {
+    return await withTransaction(this.sequelize, async (transaction) => {
       const room = await Room.findByPk(id, { transaction });
       if (!room) {
-        await transaction.rollback();
+        logger.warn(`Attempted to delete non-existent room with id: ${id}`);
         return false;
       }
       await room.destroy({ transaction });
-      await transaction.commit();
+      logger.debug(`Room deleted with id: ${id}`);
       return true;
-    } catch (error) {
-      await transaction.rollback();
-      throw error;
-    }
+    });
   }
 
   async addParticipant(roomId: number, userId: number) {
-    const transaction = await this.sequelize.transaction();
-    try {
+    return await withTransaction(this.sequelize, async (transaction) => {
       const participant = await Participant.create(
         {
           roomId,
@@ -79,13 +91,9 @@ class RoomRepository {
         },
         { transaction }
       );
-
-      await transaction.commit();
+      logger.debug(`User ${userId} added to room ${roomId}`);
       return participant;
-    } catch (error) {
-      await transaction.rollback();
-      throw error;
-    }
+    });
   }
 }
 

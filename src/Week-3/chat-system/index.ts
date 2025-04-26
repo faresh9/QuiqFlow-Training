@@ -1,14 +1,31 @@
 import SequelizeInstance from './config/SequelizeInstance.js';
+import { logger } from './api/utils/logger.js';
+//import { asyncHandler } from './api/utils/asyncHandler.js';
 
-async function testConnection() {
+// Create a version of asyncHandler that works with normal functions (not Express handlers)
+const withAsyncErrorHandling = (fn: () => Promise<void>) => {
+  return async () => {
+    try {
+      await fn();
+    } catch (error) {
+      if (error instanceof Error) {
+        logger.error(error.message, { stack: error.stack });
+      } else {
+        logger.error('Unknown error occurred');
+      }
+    }
+  };
+};
+
+const testConnection = withAsyncErrorHandling(async () => {
   try {
     const sequelize = SequelizeInstance.getInstance();
     await sequelize.authenticate();
-    console.log('Database connection has been established successfully.');
+    logger.info('Database connection has been established successfully.');
 
     // Sync all models with database
     await sequelize.sync(); // Use force: true for testing purposes
-    console.log('Models synchronized with database.');
+    logger.info('Models synchronized with database.');
 
     // Get repositories through the SequelizeInstance class
     const messageRepository = SequelizeInstance.getMessageRepository();
@@ -21,19 +38,17 @@ async function testConnection() {
     const rooms = await roomRepository.findAll();
     const roomWithParticipants = await roomRepository.findWithParticipants(1); // Example room ID
 
-    console.log('Messages:\n');
-    console.log(JSON.stringify(messages, null, 2));
-    console.log('Users:\n');
-    console.log(JSON.stringify(users, null, 2));
-    console.log('Rooms:\n');
-    console.log(JSON.stringify(rooms, null, 2));
-    console.log('Room with Participants:\n');
-    console.log(JSON.stringify(roomWithParticipants, null, 2));
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
+    logger.info('Messages:');
+    logger.info(JSON.stringify(messages, null, 2));
+    logger.info('Users:');
+    logger.info(JSON.stringify(users, null, 2));
+    logger.info('Rooms:');
+    logger.info(JSON.stringify(rooms, null, 2));
+    logger.info('Room with Participants:');
+    logger.info(JSON.stringify(roomWithParticipants, null, 2));
   } finally {
     await SequelizeInstance.closeConnection();
   }
-}
+});
 
 testConnection();

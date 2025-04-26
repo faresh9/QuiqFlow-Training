@@ -1,67 +1,55 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { logger } from './api/utils/logger.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Get migration name from command line argument
-const migrationName = process.argv[2];
-if (!migrationName) {
-  console.error('Please provide a migration name');
-  console.log('Example: npm run create-migration add-user-status');
-  process.exit(1);
-}
-
-// Create timestamp for migration filename
-const timestamp = new Date().toISOString().replace(/[-T:.Z]/g, '').substring(0, 14);
-const filename = `${timestamp}-${migrationName}.ts`;
-const migrationsDir = path.join(__dirname, 'migrations');
-
-// Create migrations directory if it doesn't exist
-if (!fs.existsSync(migrationsDir)) {
-  fs.mkdirSync(migrationsDir, { recursive: true });
-}
-
-// Migration template
-const template = `import { DataTypes, QueryInterface } from 'sequelize';
+const migrationTemplate = `import { QueryInterface } from 'sequelize';
 import { MigrationFn } from 'umzug';
 
 export const up: MigrationFn<QueryInterface> = async ({ context: queryInterface }) => {
-  // Write your migration code here
-  // Example:
-  // await queryInterface.createTable('table_name', {
-  //   id: {
-  //     type: DataTypes.INTEGER,
-  //     autoIncrement: true,
-  //     primaryKey: true,
-  //   },
-  //   name: {
-  //     type: DataTypes.STRING(100),
-  //     allowNull: false,
-  //   },
-  //   created_at: {
-  //     type: DataTypes.DATE,
-  //     allowNull: false,
-  //     defaultValue: DataTypes.NOW,
-  //   },
-  //   updated_at: {
-  //     type: DataTypes.DATE,
-  //     allowNull: false,
-  //     defaultValue: DataTypes.NOW,
-  //   }
-  // });
+  // Add your migration code here
 };
 
 export const down: MigrationFn<QueryInterface> = async ({ context: queryInterface }) => {
-  // Undo your migration code here
-  // Example:
-  // await queryInterface.dropTable('table_name');
+  // Add your rollback code here
 };
 `;
 
-// Write migration file
-const filePath = path.join(migrationsDir, filename);
-fs.writeFileSync(filePath, template);
+async function createMigration() {
+  // Get migration name from command line arguments
+  const args = process.argv.slice(2);
+  if (args.length === 0) {
+    logger.error('Migration name is required');
+    process.exit(1);
+  }
 
-console.log(`Migration created: ${filePath}`);
+  const migrationName = args[0];
+  const timestamp = new Date()
+    .toISOString()
+    .replace(/[-T:.Z]/g, '')
+    .substring(0, 14);
+  const filename = `${timestamp}-${migrationName}.ts`;
+  const filePath = path.join(__dirname, 'migrations', filename);
+
+  try {
+    // Create migrations directory if it doesn't exist
+    const migrationsDir = path.join(__dirname, 'migrations');
+    if (!fs.existsSync(migrationsDir)) {
+      fs.mkdirSync(migrationsDir, { recursive: true });
+    }
+
+    fs.writeFileSync(filePath, migrationTemplate);
+    logger.info(`Migration created at: ${filePath}`);
+  } catch (error) {
+    logger.error('Failed to create migration:');
+    process.exit(1);
+  }
+}
+
+createMigration().catch((error) => {
+  logger.error('Unhandled error:', error);
+  process.exit(1);
+});

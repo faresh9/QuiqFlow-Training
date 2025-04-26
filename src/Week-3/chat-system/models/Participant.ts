@@ -1,6 +1,5 @@
 import { Model, DataTypes, Sequelize } from 'sequelize';
 
-
 interface ParticipantAttributes {
   id?: number;
   userId: number;
@@ -55,6 +54,6 @@ export function initParticipant(sequelize: Sequelize) {
       modelName: 'Participant',
     }
   );
-  
+
   return Participant;
 }

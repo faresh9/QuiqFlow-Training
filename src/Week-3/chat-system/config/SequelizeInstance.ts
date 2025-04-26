@@ -4,6 +4,7 @@ import UserRepository from '../repositories/UserRepository.js';
 import RoomRepository from '../repositories/RoomRepository.js';
 import MessageRepository from '../repositories/MessageRepository.js';
 import { initializeModels } from '../models/index.js';
+import { logger } from '../api/utils/logger.js';
 
 class SequelizeInstance {
   private static instance: Sequelize | null = null;
@@ -28,7 +29,7 @@ class SequelizeInstance {
         {
           host: dbConfig.host,
           dialect: dbConfig.dialect as Dialect,
-          logging: console.log,
+          logging: (msg) => logger.debug(msg),
           define: {
             timestamps: true,
             underscored: true,

@@ -1,5 +1,7 @@
 import { Sequelize } from 'sequelize';
 import { Message, User, Room } from '../models/index.js';
+import { withTransaction } from '../api/utils/transactionHandler.js';
+import { logger } from '../api/utils/logger.js';
 
 class MessageRepository {
   private sequelize: Sequelize;
@@ -25,49 +27,37 @@ class MessageRepository {
   }
 
   async create(messageData: any) {
-    const transaction = await this.sequelize.transaction();
-    try {
+    return await withTransaction(this.sequelize, async (transaction) => {
       const message = await Message.create(messageData, { transaction });
-      await transaction.commit();
+      logger.debug(`Message created with id: ${message.id} in room ${messageData.roomId}`);
       return message;
-    } catch (error) {
-      await transaction.rollback();
-      throw error;
-    }
+    });
   }
 
   async update(id: number, messageData: any) {
-    const transaction = await this.sequelize.transaction();
-    try {
+    return await withTransaction(this.sequelize, async (transaction) => {
       const message = await Message.findByPk(id, { transaction });
       if (!message) {
-        await transaction.rollback();
+        logger.warn(`Attempted to update non-existent message with id: ${id}`);
         return null;
       }
       const updatedMessage = await message.update(messageData, { transaction });
-      await transaction.commit();
+      logger.debug(`Message updated with id: ${id}`);
       return updatedMessage;
-    } catch (error) {
-      await transaction.rollback();
-      throw error;
-    }
+    });
   }
 
   async delete(id: number) {
-    const transaction = await this.sequelize.transaction();
-    try {
+    return await withTransaction(this.sequelize, async (transaction) => {
       const message = await Message.findByPk(id, { transaction });
       if (!message) {
-        await transaction.rollback();
+        logger.warn(`Attempted to delete non-existent message with id: ${id}`);
         return false;
       }
       await message.destroy({ transaction });
-      await transaction.commit();
+      logger.debug(`Message deleted with id: ${id}`);
       return true;
-    } catch (error) {
-      await transaction.rollback();
-      throw error;
-    }
+    });
   }
 
   // This method retrieves all messages with their associated User and Room models, ordered by creation date in descending order.

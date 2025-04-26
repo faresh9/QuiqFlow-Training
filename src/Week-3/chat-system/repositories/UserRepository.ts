@@ -1,5 +1,7 @@
 import { Sequelize } from 'sequelize';
 import { User } from '../models/index.js';
+import { withTransaction } from '../api/utils/transactionHandler.js';
+import { logger } from '../api/utils/logger.js';
 
 class UserRepository {
   private sequelize: Sequelize;
@@ -21,49 +23,37 @@ class UserRepository {
   }
 
   async create(userData: any) {
-    const transaction = await this.sequelize.transaction();
-    try {
+    return await withTransaction(this.sequelize, async (transaction) => {
       const user = await User.create(userData, { transaction });
-      await transaction.commit();
+      logger.debug(`User created with id: ${user.id}`);
       return user;
-    } catch (error) {
-      await transaction.rollback();
-      throw error;
-    }
+    });
   }
 
   async update(id: number, userData: any) {
-    const transaction = await this.sequelize.transaction();
-    try {
+    return await withTransaction(this.sequelize, async (transaction) => {
       const user = await User.findByPk(id, { transaction });
       if (!user) {
-        await transaction.rollback();
+        logger.warn(`Attempted to update non-existent user with id: ${id}`);
         return null;
       }
       const updatedUser = await user.update(userData, { transaction });
-      await transaction.commit();
+      logger.debug(`User updated with id: ${id}`);
       return updatedUser;
-    } catch (error) {
-      await transaction.rollback();
-      throw error;
-    }
+    });
   }
 
   async delete(id: number) {
-    const transaction = await this.sequelize.transaction();
-    try {
+    return await withTransaction(this.sequelize, async (transaction) => {
       const user = await User.findByPk(id, { transaction });
       if (!user) {
-        await transaction.rollback();
+        logger.warn(`Attempted to delete non-existent user with id: ${id}`);
         return false;
       }
       await user.destroy({ transaction });
-      await transaction.commit();
+      logger.debug(`User deleted with id: ${id}`);
       return true;
-    } catch (error) {
-      await transaction.rollback();
-      throw error;
-    }
+    });
   }
 }
 

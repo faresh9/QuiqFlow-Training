@@ -38,7 +38,7 @@ export default defineConfig([{
     rules: {
         "no-console": ["warn", {
             // Allow console.log in addition to error, warn, and info
-            allow: ["error", "warn", "info", "log"],
+            allow: ["error", "warn", "info", "log", "debug"],
         }],
 
         "@typescript-eslint/explicit-function-return-type": "off",

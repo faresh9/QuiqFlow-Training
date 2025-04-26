@@ -50,6 +50,6 @@ export function initUser(sequelize: Sequelize) {
       modelName: 'User',
     }
   );
-  
+
   return User;
 }

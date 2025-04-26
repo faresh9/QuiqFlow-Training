@@ -15,7 +15,7 @@
     "db:migrate": "sequelize-cli db:migrate",
     "db:seed": "sequelize-cli db:seed:all",
     "init": "sequelize-cli init",
-    "chat-system": "tsx src/Week-3/chat-system/index.ts",
+    "chat-system": "tsx src/Week-3/chat-system/apiServer.ts",
     "day-5": "tsx src/Daily-Problem-Solving/day-5/script.ts",
     "day-6": "tsx src/Daily-Problem-Solving/day-6/script.ts",
     "day-7": "tsx src/Daily-Problem-Solving/day-7/script.ts",

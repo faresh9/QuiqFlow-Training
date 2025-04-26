@@ -8,7 +8,7 @@ export const up: MigrationFn<QueryInterface> = async ({ context: queryInterface 
       autoIncrement: true,
       primaryKey: true,
     },
-    username: { 
+    username: {
       type: DataTypes.STRING(50),
       allowNull: false,
       unique: true,
@@ -31,7 +31,7 @@ export const up: MigrationFn<QueryInterface> = async ({ context: queryInterface 
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: DataTypes.NOW,
-    }
+    },
   });
 };
 

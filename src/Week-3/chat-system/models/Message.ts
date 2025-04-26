@@ -1,6 +1,5 @@
 import { Model, DataTypes, Sequelize } from 'sequelize';
 
-
 interface MessageAttributes {
   id?: number;
   content: string;
@@ -54,6 +53,6 @@ export function initMessage(sequelize: Sequelize) {
       modelName: 'Message',
     }
   );
-  
+
   return Message;
 }

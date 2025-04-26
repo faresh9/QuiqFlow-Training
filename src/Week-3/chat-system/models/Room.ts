@@ -39,6 +39,6 @@ export function initRoom(sequelize: Sequelize) {
       modelName: 'Room',
     }
   );
-  
+
   return Room;
 }
